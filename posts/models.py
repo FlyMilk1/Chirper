@@ -21,3 +21,11 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+class Comment(models.Model):
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField(max_length=280)
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.author.username}\'s comment on {self.post.author.username}\'s post'
