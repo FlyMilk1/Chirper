@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+    <div>
+        <!-- Post -->
+        <div class="card">
+            <div>
+                <div style="display: flex; align-items: center;">
+                    <img class="profile-img" src="{{ post.author.profile.image.url }}">
+                    <div>
+                        <h3 style="margin: 0;">
+                            <a href="{% url 'profile' post.author.username %}">{{ post.author.username }}</a>
+                        </h3>
+                        <small style="color: #666;">{{ post.date_posted|naturaltime }}</small>
+                    </div>
+                </div>
+                <p class="post-content">{{ post.content }}</p>
+                
+                <div class="post-actions">
+                    <form method="POST" action="{% url 'like-post' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                        <button type="submit" class="btn btn-outline">
+                            {% if user in post.likes.all %}
+                                Unlike
+                            {% else %}
+                                Like
+                            {% endif %}
+                            ({{ post.likes.count }})
+                        </button>
+                    </form>
+                    {% if user == post.author or user.is_staff %}
+                        <a href="{% url 'post-delete' post.id %}" class="btn" style="background: #ff4444; color: white;">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Comments -->
+        <h3 style="margin-top: 2rem;">Comments</h3>
+        
+        {% if user.is_authenticated %}
+            <div class="card" style="margin-bottom: 2rem;">
+                <div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <textarea name="content" rows="3" placeholder="Tweet your reply" style="width: 100%; padding: 0.5rem;"></textarea>
+                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+        
+        {% for comment in comments %}
+            <div class="card" style="margin-bottom: 1rem;">
+                <div>
+                    <div style="display: flex; align-items: center;">
+                        <img class="profile-img" src="{{ comment.author.profile.image.url }}" style="width: 40px; height: 40px;">
+                        <div>
+                            <h4 style="margin: 0;">
+                                <a href="{% url 'profile' comment.author.username %}">{{ comment.author.username }}</a>
+                            </h4>
+                            <small style="color: #666;">{{ comment.date_posted|naturaltime }}</small>
+                            <p style="margin-top: 0.5rem;">{{ comment.content }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
