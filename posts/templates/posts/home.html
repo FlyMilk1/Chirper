@@ -15,7 +15,15 @@
                             <small style="color: #666;">{{ post.date_posted|naturaltime }}</small>
                         </div>
                     </div>
-                    <p class="post-content">{{ post.content }}</p>
+                    <div>
+                        {% if post.title %}
+                            <h4>{{ post.title }}</h4>
+                        {% endif %}
+
+                        {% if post.body %}
+                            <p class="post-content">{{ post.body }}</p>
+                        {% endif %}
+                    </div>
                     
                     <div class="post-actions">
                         <form method="POST" action="{% url 'like-post' %}">

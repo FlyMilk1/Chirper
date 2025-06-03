@@ -9,10 +9,11 @@ from django.contrib.auth.models import User
 
 
 def home(request):
-    posts = Post.objects.all().order_by('-date_posted')
+    posts = Post.objects.all().order_by('-created_at')
     context = {
         'posts': posts
     }
+
     return render(request, 'posts/home.html', context)
 
 
@@ -20,7 +21,7 @@ class PostListView(ListView):
     model = Post
     template_name = 'posts/home.html'
     context_object_name = 'posts'
-    ordering = ['-date_posted']
+    ordering = ['-created_at']
     paginate_by = 10
 
 
@@ -64,6 +65,7 @@ def post_detail(request, pk):
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
+    template_name = 'posts/post_confirm_delete.html'
     success_url = '/'
 
     def test_func(self):

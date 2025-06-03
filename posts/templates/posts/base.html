@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Twitter Clone</title>
+    <title>Chirper</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -74,7 +74,7 @@
 <body>
     <nav>
         <div>
-            <a href="{% url 'home' %}">Twitter Clone</a>
+            <a href="{% url 'home' %}">Chirper</a>
             {% if user.is_authenticated %}
                 <a href="{% url 'profile' user.username %}">Profile</a>
                 <a href="{% url 'post-create' %}">New Post</a>
